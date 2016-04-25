@@ -1,12 +1,4 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
-
 ## Loading and preprocessing the data
-```{r, echo=TRUE}
 setwd("/Users/mstaneluis/Workspace/Coursera/RepData_PeerAssessment1")
 cls = c("integer", "character", "integer")
 df <- read.csv("activity.csv", head=TRUE, colClasses=cls, na.strings="NA")
@@ -14,18 +6,15 @@ head(df)
 
 df$date <- as.Date(df$date)
 df_ign <- subset(df, !is.na(df$steps))
-```
 
 ## What is mean total number of steps taken per day?
-```{r, echo=TRUE}
 daily_sum <- tapply(df_ign$steps, df_ign$date, sum, na.rm=TRUE, simplify=T)
 daily_sum <- daily_sum[!is.na(daily_sum)]
 
 hist(x=daily_sum,col="green",breaks=20,xlab="Daily total steps",ylab="Frequency",main="The distribution of daily total (missing data ignored)")
-```
+
 
 ## What is the average daily activity pattern?
-```{r, echo=TRUE}
 mean(daily_sum)
 median(daily_sum)
 int_avg <- tapply(df_ign$steps, df_ign$interval, mean, na.rm=TRUE, simplify=T)
@@ -40,10 +29,8 @@ with(df_ia,
 
 max_steps <- max(df_ia$avg)
 df_ia[df_ia$avg == max_steps, ]
-```
 
 ## Imputing missing values
-```{r, echo=TRUE}
 sum(is.na(df$steps))
 df_impute <- df
 ndx <- is.na(df_impute$steps)
@@ -59,10 +46,8 @@ hist(x=new_daily_sum,
      main="The distribution of daily total (with missing data imputed)")
 mean(new_daily_sum)
 median(new_daily_sum)
-```
 
 ## Are there differences in activity patterns between weekdays and weekends?
-```{r, echo=TRUE}
 is_weekday <- function(d) {
   wd <- weekdays(d)
   ifelse (wd == "Saturday" | wd == "Sunday", "weekend", "weekday")
@@ -82,5 +67,4 @@ xyplot(steps ~ interval | factor(wk),
        type="l",
        lty=1,
        data=wk_df)
-```
 
